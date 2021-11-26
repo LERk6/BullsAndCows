@@ -3,7 +3,6 @@
 #include <windows.h>
 #include <time.h>
 #include <stdint.h>
-#include <math.h>
 
 int main() 
 {
@@ -12,63 +11,58 @@ int main()
     system("cls");
     srand(time(NULL));
 
-    int digit, k, n;
-    unsigned long long int userNumber, compNumber=0;
+    uint8_t digit, k, n;
+    uint64_t q=1, userNumber;
 
     do
     {
         system("cls");
-        printf("               Быки и Коровы\n");
-        printf("\nВведите скольки значное будет число [1;10]: ");
+        printf("Введите скольки значное будет число [1;10]: ");
         scanf("%d", &digit);
     } while (digit<1 || digit>10);
     
-    int compNumberArray[digit], userNumberArray[digit], bulls, cows;
+    uint8_t compNumber[digit], userNumberArray[digit], bulls=0, cows=0;
 
-    printf("\ncompNumber=%llu\n", compNumber);
-
-    for (int i=0; i<digit; i++) 
-    {
-        compNumberArray[i] = rand() % 10;
-        while (compNumberArray[0]==0)
-        {
-            compNumberArray[i] = rand() % 10;
-        }
-        
-
-        do 
-        {
-            k=0;
-            for (int j=0; j<i; j++)
-            {
-                while (compNumberArray[i]==compNumberArray[j] && k==0) 
-                {
-                    compNumberArray[i] = rand() % 10;
-                    k=1;
-                }
-            }
-        } while (k==1);
-        int q=pow(10,digit-i-1);
-        int w=compNumberArray[i];
-        compNumber=w*q;
-        printf("i=%d,compNumber=%llu\n", i, compNumber);
-    }
-    
     do
     {
-        printf("Введите предполагаемое %d-значное число: ", digit);
-        scanf("%llu", &userNumber);
+        n=0;
+        for (int i=0; i<digit; i++) 
+        {
+            compNumber[i] = rand() % 10;
+            while (compNumber[0]==0)
+            {
+                compNumber[i] = rand() % 10;
+            }
+            
 
-        bulls=4;
-        cows=0;
-
+            do 
+            {
+                k=0;
+                for (int j=0; j<i; j++)
+                {
+                    while (compNumber[i]==compNumber[j] && k==0) 
+                    {
+                        compNumber[i] = rand() % 10;
+                        k=1;
+                    }
+                }
+            } while (k==1);
+        }
+        
+        printf("\nПопытка %d - ",q);
         for (int i = 0; i < digit; i++)
         {
-            printf("%d", compNumberArray[i]);
+            printf("%d", compNumber[i]);
+            if (n==0 && compNumber[i]!=i+1) 
+                n=1;
+            if (i==9 && n==0 && compNumber[i]!=0)
+                n=1;
         }
-    } while (bulls!=4);
+        
+        q++;
+    } while (n!=0);
 
-    printf("\nВы угадали загаданное число!\nОтвет: %llu\nКолличество попыток, которо", compNumber);
+    printf("\n");
     system("pause");
     return 0;
 }
